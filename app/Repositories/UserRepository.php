@@ -4,6 +4,9 @@ namespace App\Repositories;
 use App\Interfaces\UserInterface;
 use App\Mail\OtpCodeMail;
 use App\Mail\PasswordResetMail;
+use App\MailSender\SendMailToGroupMembers;
+use App\Models\GroupMember;
+use App\Models\Invitations;
 use App\Models\OtpCode;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
@@ -31,6 +34,32 @@ class UserRepository implements UserInterface
         OtpCode::create($verification);
 
         Mail::to($data['email'])->send(new OtpCodeMail($data['username'], $data['email'], $verification['code']));
+
+        $invitationCheck = Invitations::firstWhere('invited_email', $data['email']);
+
+        if ($invitationCheck) {
+
+            $newMember = [
+                'member_email' => $invitationCheck->invited_email,
+                'group_id' => $invitationCheck->group_id,
+                'invitation_sender' => $invitationCheck->invitation_sender,
+                'date' => date('Y-m-d')
+            ];
+
+            GroupMember::create($newMember);
+
+            $groupInfos = [
+                'sender' => $invitationCheck->invitation_sender,
+                'group_id' => $invitationCheck->group_id,
+                'group' => $invitationCheck->group_name,
+                'subject' => "Ajout d'un nouveau membre au groupe",
+                'messageContent' => "d' ajouter un nouveau membre au groupe",
+            ];
+
+            SendMailToGroupMembers::sendMail($groupInfos);
+            
+            Invitations::destroy($invitationCheck->id);
+        }
 
         return $user;
     }

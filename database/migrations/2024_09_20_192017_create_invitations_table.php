@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('group_members', function (Blueprint $table) {
+        Schema::create('invitations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('group_id')->references('id')->on('groups')->nullOnDelete();
-            $table->string('member_email');
+            $table->string('invited_email');
             $table->string('invitation_sender');
-            $table->date('date')->default(date('Y-m-d'));
+            $table->string('group_name');
+            $table->foreignId('group_id')->references('id')->on('groups')->nullOnDelete();
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('group_members');
+        Schema::dropIfExists('invitations');
     }
 };

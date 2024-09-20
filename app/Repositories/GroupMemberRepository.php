@@ -8,6 +8,7 @@ use App\Mail\NewGroupMemberMail;
 use App\MailSender\SendMailToGroupMembers;
 use App\Models\Group;
 use App\Models\GroupMember;
+use App\Models\Invitations;
 use App\Models\User;
 use Mail;
 
@@ -55,6 +56,14 @@ class GroupMemberRepository implements GroupMemberInterface
                 $groupLink,
                 $group->name
             ));
+
+            $invitation = [
+                'invited_email' => $data['member_email'],
+                'group_id' => $data['group_id'],
+                'invitation_sender' => $data['invitation_sender'],
+                'group_name' => $group->name,
+            ];
+            Invitations::create($invitation);
         }
 
         return $groupMember;

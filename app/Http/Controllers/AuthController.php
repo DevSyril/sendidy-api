@@ -36,12 +36,13 @@ class AuthController
 
         try {
             $user = $this->userInterface->store($data);
-
+            
             return ApiResponse::sendResponse(true, $user, 'Compte créé avec succès.', 201);
 
         } catch (\Throwable $th) {
 
-            return ApiResponse::rollback($th);
+            // return ApiResponse::rollback($th);
+            return $th;
         }
     }
 
