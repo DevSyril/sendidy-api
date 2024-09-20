@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\GroupMemberController;
 use App\Http\Controllers\OtpCodeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -21,13 +24,14 @@ Route::prefix('v1.0.0')->group(function () {
 
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('logout-user', [AuthController::class, 'logout']);
+        Route::post('create-group', [GroupController::class, 'store']);
+        Route::post('add-member', [GroupMemberController::class, 'store']);
+        Route::post('upload-file', [FileController::class, 'store']);
     });
 
-    // Route::post('reset-password', [AuthController::class, 'resetPassword']);
-    // Route::get('list-user', [AuthController::class, 'index']);
-    // Route::post('update-user/{id}', [AuthController::class, 'update']);
-    // Route::delete('delete-user/{id}', [AuthController::class, 'destroy']);
-    // Route::get('show-user/{id}', [AuthController::class, 'show']);
-    // Route::post('login-user', [AuthController::class, 'login']);
+    Route::post('update-group/{id}', [GroupController::class, 'update']);
+    Route::get('show-group/{id}', [GroupController::class, 'show']);
+    Route::delete('delete-group/{id}', [GroupController::class, 'destroy']);
+
 
 });
