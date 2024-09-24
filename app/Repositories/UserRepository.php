@@ -57,7 +57,7 @@ class UserRepository implements UserInterface
             ];
 
             SendMailToGroupMembers::sendMail($groupInfos);
-            
+
             Invitations::destroy($invitationCheck->id);
         }
 
@@ -118,6 +118,11 @@ class UserRepository implements UserInterface
             'code' => rand(111111, 999999)
         ];
 
+        $otp = OtpCode::where('email', $email)->first();
+
+        if ($otp)
+            OtpCode::destroy($otp->id);
+        
         OtpCode::create($data);
 
         Mail::to($email)->send(new PasswordResetMail($user->username, $email, $data['code']));

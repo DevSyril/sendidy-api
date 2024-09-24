@@ -25,7 +25,7 @@ class AddMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'member_email' => 'required|min:6|max:128|email|unique:group_members',
+            'member_email' => 'required|min:6|max:128|email|',
         ];
     }
 

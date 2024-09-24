@@ -75,7 +75,7 @@ class AuthController
             } else {
                 return ApiResponse::sendResponse(
                     true,
-                    [new UserResources($user)],
+                    $user,
                     'Bienvenue ' . $user->username,
                     200
                 );

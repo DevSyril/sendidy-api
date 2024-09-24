@@ -18,7 +18,7 @@ Route::prefix('v1.0.0')->group(function () {
     Route::post('login-user', [AuthController::class, 'login']);
     Route::post('create-user', [AuthController::class, 'store']);
     Route::post('check-otp', [OtpCodeController::class, 'checkOtpCode']);
-    Route::post('reset-password', [AuthController::class, 'resetPassword']);
+    Route::post('reset-password', action: [AuthController::class, 'resetPassword']);
     Route::patch('change-password/{id}', [UserController::class, 'changePassword']);
     Route::post('edit-profile/{id}', [UserController::class, 'update']);
 
