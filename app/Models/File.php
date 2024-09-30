@@ -14,6 +14,7 @@ class File extends Model
         'sender',
         'upload_date',
         'group_id',
-        'file_size'
+        'file_size',
+        'file_type'
     ];
 }

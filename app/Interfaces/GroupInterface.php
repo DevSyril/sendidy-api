@@ -9,4 +9,6 @@ interface GroupInterface
     public function update(array $data, string $id);
     public function destroy(string $id);
     public function show(string $id);
+    public function getUserGroups();
+    public function searchGroup(string $group);
 }

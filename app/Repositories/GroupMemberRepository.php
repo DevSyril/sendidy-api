@@ -48,7 +48,7 @@ class GroupMemberRepository implements GroupMemberInterface
 
             SendMailToGroupMembers::sendMail($groupInfos);
 
-        }else {
+        } else {
 
             Mail::to($data['member_email'])->send(new NewGroupMemberMail(
                 $data['invitation_sender'],
@@ -67,6 +67,23 @@ class GroupMemberRepository implements GroupMemberInterface
         }
 
         return $groupMember;
+    }
+
+    public function getGroupMembers(string $id)
+    {
+
+        $members = GroupMember::where('group_id', $id)->get();
+
+        $data = [];
+
+        foreach ($members as $member) {
+            array_push($data, User::where('email', $member->member_email)->first());
+        }
+
+        if (count($data) == 0)
+            return false;   
+
+        return $data;
     }
 
 }

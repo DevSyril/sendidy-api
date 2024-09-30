@@ -6,6 +6,7 @@ use App\Http\Requests\Users\ChangePasswordRequest;
 use App\Http\Requests\Users\EditUserProfileRequest;
 use App\Http\Resources\UserResources;
 use App\Interfaces\UserInterface;
+use App\Models\User;
 use App\Responses\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +27,7 @@ class UserController
         ];
 
         try {
-            $user = $this->userInterface->update($data, $id);
+            $user = $this->userInterface->update($data);
 
             return ApiResponse::sendResponse(true, [], 'Mot de passe modifié avec succès.', 201);
 
@@ -36,9 +37,10 @@ class UserController
         }
     }
 
-    public function update(EditUserProfileRequest $request, string $id) {
+    public function update(EditUserProfileRequest $request) {
 
-        $user = $this->userInterface->show($id);
+        $currentUser = User::find(auth()->user()->getAuthIdentifier());
+        $user = $this->userInterface->show($currentUser->id);
 
         $data = [
             'username' => $request->username ? $request->username : $user->username,
@@ -68,7 +70,7 @@ class UserController
 
         try {
 
-            $this->userInterface->update($data, $id);
+            $this->userInterface->update($data);
 
             DB::commit();
 
@@ -80,5 +82,19 @@ class UserController
 
         }
     }
-    
+
+
+    public function index() {
+        try {
+
+            $users = $this->userInterface->index();
+
+            return ApiResponse::sendResponse(true, $users, 'Opération effectuée.', 200);
+
+        } catch (\Throwable $th) {
+
+            return ApiResponse::rollback($th);
+
+        }
+    }
 }

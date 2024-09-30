@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Files\UploadFileRequest;
 use App\Interfaces\FileInterface;
+use App\Models\File;
 use App\Responses\ApiResponse;
 use Illuminate\Http\Request;
 
@@ -21,9 +22,19 @@ class FileController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function groupFiles(string $id)
     {
-        //
+        try {
+
+            $file = File::where('group_id', $id)->get();
+
+            return ApiResponse::sendResponse(true, $file, 'Fichier téléchargé avec succès.', 200);
+
+        } catch (\Throwable $th) {
+
+            return ApiResponse::rollback($th);
+
+        }
     }
 
 
@@ -37,6 +48,7 @@ class FileController
             'group_id' => $request->group_id,
             'name' => str_replace(' ', '_', $request->file->getClientOriginalName()),
             'file_size' => $request->file->getSize(),
+            'file_type' => $request->file->extension(),
         ];
 
         $destinationPath = 'db/groupDatas/files/';
@@ -44,6 +56,8 @@ class FileController
         try {
 
             $myFile = $request->file('file');
+            $myFile->storeAs('uploads', $file['name']);
+
             $myFile->move($destinationPath, $file['name']);
 
             $file = $this->fileInterface->store($file);
@@ -52,7 +66,7 @@ class FileController
 
         } catch (\Throwable $th) {
 
-            /*return ApiResponse::rollback($th);*/ return $th;
+            return ApiResponse::rollback($th);
 
         }
     }
@@ -87,5 +101,22 @@ class FileController
     public function destroy(string $id)
     {
         //
+    }
+
+    public function download(string $id) {
+
+        $file = File::where('id', $id)->first();
+
+        $filePath = storage_path("app/private/uploads/$file->name");
+
+        if (file_exists($filePath)) {
+
+            return response()->download($filePath, $file->name);
+
+        } else {
+            abort(404, 'Le fichier est introuvable');
+
+            return ApiResponse::sendResponse(false, null, 'Fichier introuvable.', 404);
+        }
     }
 }

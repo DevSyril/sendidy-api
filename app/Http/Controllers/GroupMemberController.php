@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Group\AddMemberRequest;
 use App\Interfaces\GroupMemberInterface;
+use App\Models\GroupMember;
 use App\Responses\ApiResponse;
 use Illuminate\Http\Request;
 
@@ -31,6 +32,7 @@ class GroupMemberController
      */
     public function store(AddMemberRequest $request)
     {
+
         $data = [
             'group_id' => $request->group_id,
             'date' => date('Y-m-d'),
@@ -39,9 +41,36 @@ class GroupMemberController
 
         try {
 
+            $member = GroupMember::where('member_email', $request->member_email)->first();
+
+            if ($member)
+            {
+                return ApiResponse::sendResponse(false, $member, 'Ce membre existe déjà.', 200);
+            }
+
             $member = $this->groupMemberInterface->addMember($data);
 
             return ApiResponse::sendResponse(true, $member, 'Nouveau membre ajouté avec succès.', 201);
+
+        } catch (\Throwable $th) {
+
+            return ApiResponse::rollback($th);
+
+        }
+    }
+
+
+    public function getGroupMembers(string $id)
+    {
+        try {
+
+            $member = $this->groupMemberInterface->getGroupMembers($id);
+
+            if (!$member) {
+                return ApiResponse::sendResponse(false, $member, 'Aucun membre trouvé.', 200);
+            }
+
+            return ApiResponse::sendResponse(true, $member, 'Opération effectuée.', 200);
 
         } catch (\Throwable $th) {
 

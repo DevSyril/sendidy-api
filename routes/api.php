@@ -20,18 +20,26 @@ Route::prefix('v1.0.0')->group(function () {
     Route::post('check-otp', [OtpCodeController::class, 'checkOtpCode']);
     Route::post('reset-password', action: [AuthController::class, 'resetPassword']);
     Route::patch('change-password/{id}', [UserController::class, 'changePassword']);
-    Route::post('edit-profile/{id}', [UserController::class, 'update']);
-
+    
     Route::middleware(['auth:sanctum'])->group(function () {
+
+        Route::post('edit-profile', [UserController::class, 'update']);
+        Route::get('list-users', [UserController::class, 'index']);
+        Route::get('user-groups', [GroupController::class, 'getUserGroups']);
+        Route::get('current-user', [AuthController::class, 'getCurrentUser']);
         Route::get('logout-user', [AuthController::class, 'logout']);
         Route::post('create-group', [GroupController::class, 'store']);
         Route::post('add-member', [GroupMemberController::class, 'store']);
         Route::post('upload-file', [FileController::class, 'store']);
+        Route::get('show-group/{id}', [GroupController::class, 'show']);
+        Route::get('show-group-members/{id}', [GroupMemberController::class, 'getGroupMembers']);
+        Route::get('search-group/{group}', [GroupController::class, 'searchGroup']);
+        Route::get('group-files/{id}', [FileController::class, 'groupFiles']);
     });
 
     Route::post('update-group/{id}', [GroupController::class, 'update']);
-    Route::get('show-group/{id}', [GroupController::class, 'show']);
     Route::delete('delete-group/{id}', [GroupController::class, 'destroy']);
 
+    Route::get('files-download/{id}', [FileController::class, 'download']);
 
 });

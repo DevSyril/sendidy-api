@@ -125,5 +125,20 @@ class AuthController
         }
     }
 
-    
+    public function getCurrentUser() {
+
+        try {
+            $user = User::find(auth()->user()->getAuthIdentifier());
+
+            return ApiResponse::sendResponse(
+                true,
+                [new UserResources($user)],
+                'Succès',
+                200
+            );
+        } catch (\Throwable $th) {
+            return ApiResponse::rollback($th);
+        }
+    }
+
 }

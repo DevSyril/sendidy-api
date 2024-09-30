@@ -18,6 +18,7 @@ return new class extends Migration
             $table->dateTime('upload_date')->default(now());
             $table->foreignId('group_id')->references('id')->on('groups')->nullOnDelete();
             $table->string('file_size');
+            $table->string('file_type');
             $table->timestamps();
         });
     }

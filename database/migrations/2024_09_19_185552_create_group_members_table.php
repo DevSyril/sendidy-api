@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('group_id')->references('id')->on('groups')->nullOnDelete();
             $table->string('member_email');
-            $table->string('invitation_sender');
+            $table->string('invitation_sender')->nullable();
             $table->date('date')->default(date('Y-m-d'));
             $table->timestamps();
         });

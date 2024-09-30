@@ -65,9 +65,10 @@ class UserRepository implements UserInterface
     }
 
 
-    public function update(array $data, string $id)
+    public function update(array $data)
     {
-        return User::findOrFail($id)->update($data);
+        $user = User::find(auth()->user()->getAuthIdentifier());
+        return User::findOrFail($user->id)->update($data);
     }
 
 
@@ -128,5 +129,10 @@ class UserRepository implements UserInterface
         Mail::to($email)->send(new PasswordResetMail($user->username, $email, $data['code']));
 
         return $user;
+    }
+
+
+    public function getCurrentUser() {
+        return User::find(auth()->user()->getAuthIdentifier());
     }
 }

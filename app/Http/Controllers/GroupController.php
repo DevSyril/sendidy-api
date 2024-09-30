@@ -60,12 +60,11 @@ class GroupController
 
             $group = $this->groupInterface->show($id);
 
-            return ApiResponse::sendResponse(true, [new GroupResources($group)], 'Groupe créé avec succès.', 201);
+            return ApiResponse::sendResponse(true, [new GroupResources($group)], 'Opération effectuée avec succès.', 201);
 
         } catch (\Throwable $th) {
 
             return ApiResponse::rollback($th);
-
         }
     }
 
@@ -123,6 +122,34 @@ class GroupController
             $this->groupInterface->destroy($id);
 
             return ApiResponse::sendResponse(true, [], 'Groupe créé avec succès.', 201);
+
+        } catch (\Throwable $th) {
+
+            return ApiResponse::rollback($th);
+
+        }
+    }
+
+    public function getUserGroups() {
+        try {
+
+            $groups = $this->groupInterface->getUserGroups();
+
+            return ApiResponse::sendResponse(true, $groups, 'Groupes récupérés avec succès.', 200);
+
+        } catch (\Throwable $th) {
+
+            return ApiResponse::rollback($th);
+
+        }
+    }
+
+    public function searchGroup(string $group) {
+        try {
+
+            $group = $this->groupInterface->searchGroup($group);
+
+            return ApiResponse::sendResponse(true, $group, 'Groupes récupérés avec succès.', 200);
 
         } catch (\Throwable $th) {
 
