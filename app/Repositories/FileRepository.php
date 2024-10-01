@@ -25,7 +25,7 @@ class FileRepository implements FileInterface
             'group_id' => $data['group_id'],
             'group' => $group->name,
             'subject' => "Nouveau fichier",
-            'messageContent' => "d'ajouter un nouveau fichier au groupe",
+            'messageContent' => "d'ajouter un nouveau fichier au groupe",   
         ];
 
         SendMailToGroupMembers::sendMail($mailInfos);

@@ -32,6 +32,7 @@ class AuthController
             'username' => $request->username,
             'email' => $request->email,
             'password' => $request->password,
+            'profilePhoto' => 'user-placeholder.png'
         ];
 
         try {
@@ -41,8 +42,7 @@ class AuthController
 
         } catch (\Throwable $th) {
 
-            // return ApiResponse::rollback($th);
-            return $th;
+            return ApiResponse::rollback($th);
         }
     }
 
@@ -106,6 +106,7 @@ class AuthController
         }
     }
 
+
     public function logout()
     {
         try {
@@ -124,6 +125,7 @@ class AuthController
             return ApiResponse::rollback($th);
         }
     }
+    
 
     public function getCurrentUser() {
 

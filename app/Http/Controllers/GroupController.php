@@ -35,7 +35,8 @@ class GroupController
         $data = [
             'name' => $request->name,
             'description' => $request->description,
-            'creationDate' => date('Y-M-D')
+            'creationDate' => date('Y-M-D'),
+            'profilePhoto' => 'group-placeholder.png'
         ];
 
         try {
@@ -119,9 +120,9 @@ class GroupController
     {
         try {
 
-            $this->groupInterface->destroy($id);
+            $this->groupInterface->delete($id);
 
-            return ApiResponse::sendResponse(true, [], 'Groupe créé avec succès.', 201);
+            return ApiResponse::sendResponse(true, [], 'Groupe supprimé avec succès.', 200);
 
         } catch (\Throwable $th) {
 

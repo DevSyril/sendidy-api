@@ -44,9 +44,10 @@ class FileController
      */
     public function store(UploadFileRequest $request)
     {
+        
         $file = [
             'group_id' => $request->group_id,
-            'name' => str_replace(' ', '_', $request->file->getClientOriginalName()),
+            'name' => rand(1111, 9999) . str_replace(' ', '_', $request->file->getClientOriginalName()),
             'file_size' => $request->file->getSize(),
             'file_type' => $request->file->extension(),
         ];
@@ -60,9 +61,9 @@ class FileController
 
             $myFile->move($destinationPath, $file['name']);
 
-            $file = $this->fileInterface->store($file);
+            $files = $this->fileInterface->store($file);
 
-            return ApiResponse::sendResponse(true, $file, 'Fichier téléchargé avec succès.', 201);
+            return ApiResponse::sendResponse(true, $files, 'Fichier téléchargé avec succès.', 201);
 
         } catch (\Throwable $th) {
 

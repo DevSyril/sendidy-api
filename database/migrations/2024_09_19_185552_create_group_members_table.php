@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('group_members', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('group_id')->references('id')->on('groups')->nullOnDelete();
+            $table->foreignId('group_id')->references('id')->on('groups')->cascadeOnDelete();
             $table->string('member_email');
             $table->string('invitation_sender')->nullable();
             $table->date('date')->default(date('Y-m-d'));

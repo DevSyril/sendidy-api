@@ -38,7 +38,7 @@ class GroupRepository implements GroupInterface
         return Group::findOrFail($id)->update($data);
     }
 
-    public function destroy(string $id)
+    public function delete(string $id)
     {
         return Group::destroy($id);
     }

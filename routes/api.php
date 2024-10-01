@@ -35,11 +35,10 @@ Route::prefix('v1.0.0')->group(function () {
         Route::get('show-group-members/{id}', [GroupMemberController::class, 'getGroupMembers']);
         Route::get('search-group/{group}', [GroupController::class, 'searchGroup']);
         Route::get('group-files/{id}', [FileController::class, 'groupFiles']);
+        Route::post('update-group/{id}', [GroupController::class, 'update']);
+        Route::delete('delete-group/{id}', [GroupController::class, 'destroy']);
+        Route::get('files-download/{id}', [FileController::class, 'download']);
     });
 
-    Route::post('update-group/{id}', [GroupController::class, 'update']);
-    Route::delete('delete-group/{id}', [GroupController::class, 'destroy']);
-
-    Route::get('files-download/{id}', [FileController::class, 'download']);
 
 });
