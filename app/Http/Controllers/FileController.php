@@ -26,7 +26,7 @@ class FileController
     {
         try {
 
-            $file = File::where('group_id', $id)->get();
+            $file = File::where('group_id', $id)->orderBy('upload_date', 'desc')->get();
 
             return ApiResponse::sendResponse(true, $file, 'Fichier téléchargé avec succès.', 200);
 
@@ -50,6 +50,7 @@ class FileController
             'name' => rand(1111, 9999) . str_replace(' ', '_', $request->file->getClientOriginalName()),
             'file_size' => $request->file->getSize(),
             'file_type' => $request->file->extension(),
+            'upload_date' => now()
         ];
 
         $destinationPath = 'db/groupDatas/files/';

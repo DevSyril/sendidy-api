@@ -15,7 +15,6 @@ class GroupRepository implements GroupInterface
 
     public function store(array $data)
     {
-
         $user = User::find(auth()->user()->getAuthIdentifier());
 
         $data['owner_id'] = $user->id;
@@ -30,7 +29,6 @@ class GroupRepository implements GroupInterface
         GroupMember::create($member);
 
         return $group;
-
     }
 
     public function update(array $data, string $id)
