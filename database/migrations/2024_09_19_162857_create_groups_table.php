@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('owner_id');
             $table->string('description');
             $table->string('profilePhoto')->nullable();
-            $table->foreign('owner_id')->references('id')->on('users')->noActionOnDelete();
+            $table->foreign('owner_id')->references('id')->on('users')->cascadeOnDelete();
             $table->date('creationDate');
             $table->timestamps();
         });
