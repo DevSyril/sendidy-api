@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->unsignedBigInteger('owner_id');
             $table->string('description');
             $table->string('profilePhoto')->nullable();
-            $table->foreignId('owner_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('owner_id')->references('id')->on('users')->noActionOnDelete();
             $table->date('creationDate');
             $table->timestamps();
         });
