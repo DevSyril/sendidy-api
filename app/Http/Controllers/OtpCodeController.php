@@ -45,7 +45,7 @@ class OtpCodeController
 
             return ApiResponse::sendResponse(
                 true,
-                [new UserResources($user)],
+                $user,
                 'Bienvenue '.$user->username,
                 200
             );
